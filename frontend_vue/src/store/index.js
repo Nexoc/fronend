@@ -9,8 +9,6 @@ export default createStore({
         // name, email, username, password
         access_token: null, 
         refresh_token: null,
-        user: null, // sign up user name
-        password: null,
         signUpError: null
     },
 
@@ -24,7 +22,6 @@ export default createStore({
         newUser (state) {
           let newUser = {
             "user": state.user,
-            "password": state.password
             // name, email, username, password
           }
           return   newUser
@@ -44,19 +41,17 @@ export default createStore({
         signUpToken (state, userData) {
             state.access_token = userData.access_token
             state.refresh_token = userData.refresh_token
-            state.user = userData.username
             state.signUpError = null
         },
         logOut (state) {
             // console.log('mutation Log Out')
             state.access_token = null
             state.refresh_token = null
-            state.user = null
         },
         insertUser (state, userData) {
             // console.log('mutation insert User')
-            state.user = userData.username
-            state.password = userData.password
+            state.access_token = userData.accessToken
+            state.refresh_token = userData.refreshToken
         },
         signUpError(state) {
             //console.log('mutation sign up Error') 
@@ -69,20 +64,18 @@ export default createStore({
         async signUp ({ commit }, user) {  // { dispatch}
           //console.log('action signUp')
           const form = {
-            "iusername": user.username,
-            "ipassword": user.password
+            "username": user.username,
+            "password": user.password
           }
           try{
-              let response = await axios.post('/rpc/authenticate', form)
+              let response = await axios.post('/api/v1/auth/login', form)
               const userData = {
                 "access_token": response.data.access_token,
                 "refresh_token": response.data.refresh_token,
-                "username": user.username
               }
               if (response.statusText == "OK") {
                 localStorage.setItem("access_token", response.data.access_token)
                 localStorage.setItem("refresh_token", response.data.refresh_token)
-                localStorage.setItem("user", user.username)
                 commit('signUpToken', userData)
               } 
           } catch(error) {
@@ -136,17 +129,22 @@ export default createStore({
         async insertUser ({ commit }, user) {  // { dispatch, commit }
           // name, email, username, password
           console.log('action insertUser')
-          // console.log(user.username)
+          console.log(user.name, user.email, user.username, user.password)
           const form = {
             "name": user.name,
             "email": user.email,
             "username": user.username,
             "password": user.password,
           }
-          let response = await axios.post('/api/v1/auth//register', form)
+          let response = await axios.post('/api/v1/auth/register', form, {
+            headers: {
+              // remove headers
+            }
+          })
+          console.log('action 144 insertUser')
           const userData = {
-            "username": user.username,
-            "password": response.data.password
+            "accessToken": response.data.accessToken,
+            "refreshToken": response.data.refreshToken
           }
           commit('insertUser', userData)
         },

@@ -15,6 +15,7 @@
                 <input type="email" name="email" placeholder="email" v-model="data.email" />
                 <input type="text" name="username" placeholder="Username" v-model="data.username" />
                 <input type="password" name="password" placeholder="password" v-model="data.password" />
+
             </div>
 
             <button id='createUser'>Registration</button>
@@ -22,8 +23,8 @@
 
         <template v-if="newUser.user">
         <div class="zeigen">
-            <h2>User: {{ newUser.user }}</h2>
-            <h2>Password: {{ newUser.password }}</h2>
+            <h2>User: {{ newUser.accessToken }}</h2>
+            <h2>Password: {{ newUser.refreshToken }}</h2>
         </div>
         </template>
 
@@ -49,7 +50,6 @@
                     email: '',
                     username: '',
                     password: '',
-
                 }
             }
         },
