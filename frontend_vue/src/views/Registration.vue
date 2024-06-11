@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 <template>
 <div class="body">
 <div id="app" class="main">
@@ -8,16 +10,14 @@
 
         <form @submit.prevent="insertUser">
         
-            <div id='login'>
-                <input 
-                type="text" 
-                name="username" 
-                placeholder="Username"
-                v-model="data.username"       
-                />
+            <div id='createUser'>
+                <input type="text" name="name" placeholder="Name" v-model="data.name" />
+                <input type="email" name="email" placeholder="email" v-model="data.email" />
+                <input type="text" name="username" placeholder="Username" v-model="data.username" />
+                <input type="password" name="password" placeholder="password" v-model="data.password" />
             </div>
 
-            <button id='login'>Registration</button>
+            <button id='createUser'>Registration</button>
         </form>
 
         <template v-if="newUser.user">
@@ -37,7 +37,7 @@
     import { mapGetters } from "vuex";
 
     export default {
-        name: 'registration',
+        name: 'registrationMy',
         components: {
             //
         },
@@ -45,7 +45,11 @@
         data() {
             return {
                 data: {
-                username: ''
+                    name: '',
+                    email: '',
+                    username: '',
+                    password: '',
+
                 }
             }
         },

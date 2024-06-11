@@ -56,6 +56,7 @@
 </template>
 
 <script>
+/* eslint-disable */
     import { mapGetters, createStore, } from "vuex";
     import axios from 'axios'
     import store from '../store/index'

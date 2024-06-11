@@ -1,3 +1,5 @@
+
+
 <template>
 <div class="body">
   <div id="app" class="main">
@@ -79,9 +81,11 @@
 
 
 <script>
+/* eslint-disable */
     import { mapGetters, createStore } from "vuex";
     import axios from 'axios'
     import store from '../store/index'
+
 
     const reporterStore = createStore({
 
@@ -216,7 +220,7 @@
 
     export default {
         namespaced: true,
-        username: 'home',
+        username: 'homeTor',
 
         data() {
                 return {

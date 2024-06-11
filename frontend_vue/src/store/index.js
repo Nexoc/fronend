@@ -6,6 +6,7 @@ export default createStore({
     namespaced: true,
 
     state: {
+        // name, email, username, password
         access_token: null, 
         refresh_token: null,
         user: null, // sign up user name
@@ -24,6 +25,7 @@ export default createStore({
           let newUser = {
             "user": state.user,
             "password": state.password
+            // name, email, username, password
           }
           return   newUser
         },
@@ -46,13 +48,13 @@ export default createStore({
             state.signUpError = null
         },
         logOut (state) {
-            //console.log('mutation Log Out')
+            // console.log('mutation Log Out')
             state.access_token = null
             state.refresh_token = null
             state.user = null
         },
         insertUser (state, userData) {
-            //console.log('mutation insert User')
+            // console.log('mutation insert User')
             state.user = userData.username
             state.password = userData.password
         },
@@ -90,6 +92,7 @@ export default createStore({
           }
         },
 
+        /* eslint-disable */
         async refresh_token ( {commit} , error) {
           //console.log("index action refresh token")
           //console.log(error)
@@ -131,12 +134,16 @@ export default createStore({
 
         // create | insert a new User
         async insertUser ({ commit }, user) {  // { dispatch, commit }
-          //console.log('action insertUser')
-          //console.log(user.username)
+          // name, email, username, password
+          console.log('action insertUser')
+          // console.log(user.username)
           const form = {
-            "iusername": user.username
+            "name": user.name,
+            "email": user.email,
+            "username": user.username,
+            "password": user.password,
           }
-          let response = await axios.post('/rpc/register', form)
+          let response = await axios.post('/api/v1/auth//register', form)
           const userData = {
             "username": user.username,
             "password": response.data.password
