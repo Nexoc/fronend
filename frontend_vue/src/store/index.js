@@ -112,8 +112,7 @@ export default createStore({
           // console.log("index.js token_storage function")
           const userData = {
             "access_token": localStorage.getItem('access_token'),
-            "refresh_token": localStorage.getItem('refresh_token'),
-            "username": localStorage.getItem('user')
+            "refresh_token": localStorage.getItem('refresh_token'),          
           }
           commit('signUpToken', userData)
         },
@@ -122,14 +121,10 @@ export default createStore({
           commit('logOut')
           localStorage.removeItem('access_token')
           localStorage.removeItem('refresh_token')
-          localStorage.removeItem('user')
         },
 
         // create | insert a new User
         async insertUser ({ commit }, user) {  // { dispatch, commit }
-          // name, email, username, password
-          console.log('action insertUser')
-          console.log(user.name, user.email, user.username, user.password)
           const form = {
             "name": user.name,
             "email": user.email,
@@ -141,13 +136,27 @@ export default createStore({
               // remove headers
             }
           })
-          console.log('action 144 insertUser')
+          console.log('action 139 insertUser')
+          console.log("access token: " + response.data.accessToken)
+          console.log("refresh token: " + response.data.refreshToken)
+          console.log(response.statusText)
+          console.log(response)
+
+
+          if (response.status == 200) {   
+            console.log("here")         
+            localStorage.setItem("access_token", response.data.accessToken)
+            localStorage.setItem("refresh_token", response.data.refreshToken)
+            console.log(" new access token!!! " + localStorage.getItem("access_token"))
+          }
+
           const userData = {
             "accessToken": response.data.accessToken,
             "refreshToken": response.data.refreshToken
           }
           commit('insertUser', userData)
-        },
+        }
 
     },
   })
+
