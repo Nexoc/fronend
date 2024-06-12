@@ -5,24 +5,21 @@ export default createStore({
 
     namespaced: true,
 
-    state: {
-        // name, email, username, password
+    state: {        
         access_token: null, 
         refresh_token: null,
+        isAuthenticated: null,
         signUpError: null
     },
 
     getters: {
         authenticated (state){
-            return state.access_token && state.user
+            return state.access_token
         }, 
-        user (state) {
-            return state.user
-        },
         newUser (state) {
           let newUser = {
-            "user": state.user,
-            // name, email, username, password
+            "access_token": state.access_token, 
+            "refresh_token": state.refresh_token,                      
           }
           return   newUser
         },
@@ -68,6 +65,7 @@ export default createStore({
             "password": user.password
           }
           try{
+              // const responce = await this.$axios.get('/ADRESS');
               let response = await axios.post('/api/v1/auth/login', form)
               const userData = {
                 "access_token": response.data.access_token,
@@ -85,7 +83,9 @@ export default createStore({
           }
         },
 
+
         /* eslint-disable */
+        /* 
         async refresh_token ( {commit} , error) {
           //console.log("index action refresh token")
           //console.log(error)
@@ -107,15 +107,7 @@ export default createStore({
             commit('logOut')
           }     
         },
-
-        token_storage ( { commit } ) {
-          // console.log("index.js token_storage function")
-          const userData = {
-            "access_token": localStorage.getItem('access_token'),
-            "refresh_token": localStorage.getItem('refresh_token'),          
-          }
-          commit('signUpToken', userData)
-        },
+        */
 
         logOut({ commit }) {
           commit('logOut')
@@ -131,24 +123,17 @@ export default createStore({
             "username": user.username,
             "password": user.password,
           }
+          // TODO try catch
           let response = await axios.post('/api/v1/auth/register', form, {
             headers: {
               // remove headers
             }
           })
-          console.log('action 139 insertUser')
-          console.log("access token: " + response.data.accessToken)
-          console.log("refresh token: " + response.data.refreshToken)
-          console.log(response.statusText)
-          console.log(response)
 
-
-          if (response.status == 200) {   
-            console.log("here")         
+          if (response.status == 200) {           
             localStorage.setItem("access_token", response.data.accessToken)
             localStorage.setItem("refresh_token", response.data.refreshToken)
-            console.log(" new access token!!! " + localStorage.getItem("access_token"))
-          }
+            }
 
           const userData = {
             "accessToken": response.data.accessToken,

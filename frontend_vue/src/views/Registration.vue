@@ -63,7 +63,7 @@
 
         methods: {   
             insertUser() {
-                //To create a new User -> send to index.js actions insertUser()
+                // To create a new User -> send to index.js actions insertUser()                
                 try{
                  this.$store.dispatch('insertUser', this.data)
                 } catch (error) {
