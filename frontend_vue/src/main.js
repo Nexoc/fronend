@@ -33,10 +33,16 @@ async function refreshToken() {
 // request interceptor
 axios.interceptors.request.use(
     async config => {
+
+        if (!config.headers.skipAuthorization) {
+
         const accessToken = localStorage.getItem('access_token');
         if(accessToken) {
             config.headers['Authorization'] = `Bearer ${accessToken}`;            
         }
+    }
+        // Remove the custom flag before sending the request
+        delete config.headers.skipAuthorization;
 
         return config;
     },
@@ -78,6 +84,8 @@ const app = createApp(App);
 
 app.config.globalProperties.$axios = axios;
 app.use(store).use(router).use(Vuex).mount('#app')
+
+
 
 
 

@@ -273,8 +273,8 @@
 	margin: 0;
 	padding: 0;
 	display: flex;
-	justify-content: center;
-	align-items: center;
+	justify-content: left;
+	align-items: left;
 	min-height: 100vh;
 	font-family: 'Jost', sans-serif;
 	background: linear-gradient(to bottom, #ffffff, #ffffff, #b3eeb3);
@@ -284,7 +284,8 @@
 	overflow: hidden;
     border-radius: 10px;
 	box-shadow: 5px 20px 50px #000;
-    margin: 0 auto;
+    margin: 300px;
+    padding: 20px;
 }
 img{
 	width: 325px;

@@ -3,15 +3,15 @@
 <div id="app" class="main">
 
     <img src="../assets/logo.png" alt="">
-    <form @submit.prevent="signUp">
-        <h2>{{ signUpError }}</h2>
-        <div class="signup">
-            <div id='signup'>
+    <form @submit.prevent="signIn">
+        <h2>{{ signInError }}</h2>
+        <div class="signin">
+            <div id='signin'>
                 <input 
                 type="text" 
-                name="username" 
-                placeholder="User name"
-                v-model="data.username"       
+                name="email" 
+                placeholder="Email"
+                v-model="data.email"       
                 />
             </div>
 
@@ -36,23 +36,23 @@
     import { mapGetters } from 'vuex';
 
     export default {
-        username: 'signin',
+        name: 'signIn',
         components: {
             //
         },
         data() {
             return {
                 data: {
-                username: '',
-                password: ''
+                    email: '',
+                    password: ''
                 }
             }
         },
 
 
         methods: {   
-            async signUp() {
-                this.$store.dispatch('signUp', this.data)
+            async signIn() {
+                this.$store.dispatch('signIn', this.data)
                 .then(() => {
                     if (this.authenticated) {
                         this.$router.replace({name: 'home'})
@@ -63,8 +63,8 @@
         computed: {
             ...mapGetters({
                 authenticated: "authenticated",
-                user: "user",
-                signUpError: "signUpError"
+                username: "username",
+                signInError: "signInError"
             })
         }
     }
@@ -90,7 +90,7 @@
 	box-shadow: 5px 20px 50px #000;
     margin: 0 auto;
 }
-.signup{
+.signin{
 	position: relative;
 	width:100%;
 	height: 100%;

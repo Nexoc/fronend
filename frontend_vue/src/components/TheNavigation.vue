@@ -15,7 +15,7 @@
         </li>
 
         <li>
-            <button>{{ user }}</button>                
+            <button>{{ username }}</button>                
         </li>
  
         <li class="logout" style="float:right">
@@ -77,7 +77,7 @@
         computed: {
             ...mapGetters({
                 authenticated: "authenticated",
-                user: "user"
+                username: "username"
             })
         }
     }

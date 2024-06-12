@@ -17,8 +17,15 @@ npm install --save vuex
 # install vue-router
 npm install vue-router@4
 
+# install bootstrap
+npm i bootstrap@5.3.3
 
+# install floating-ui/vue
+### Popper.js v1.16 is required for dropdowns (and components based on dropdown), tooltips, and popovers. 
+npm install @floating-ui/vue
 
+# fix 
+npm audit fix --force
 
 
 

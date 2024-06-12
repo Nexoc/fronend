@@ -9,7 +9,8 @@ export default createStore({
         access_token: null, 
         refresh_token: null,
         isAuthenticated: null,
-        signUpError: null
+        signInError: null,
+        username: null
     },
 
     getters: {
@@ -29,90 +30,79 @@ export default createStore({
         refresh_token(state) {
           return state.refresh_token
         },
-        signUpError(state){
-          return state.signUpError
+        signInError(state){
+          return state.signInError
+        },
+        username(state){
+          return state.username
         }
     },
 
     mutations: {
-        signUpToken (state, userData) {
+        signInToken (state, userData) {
             state.access_token = userData.access_token
             state.refresh_token = userData.refresh_token
-            state.signUpError = null
+            state.signInError = null
+            state.username = userData.username
         },
         logOut (state) {
             // console.log('mutation Log Out')
             state.access_token = null
             state.refresh_token = null
+            state.username = null
         },
         insertUser (state, userData) {
             // console.log('mutation insert User')
             state.access_token = userData.accessToken
             state.refresh_token = userData.refreshToken
+            state.username = userData.username
         },
-        signUpError(state) {
+        signInError(state) {
             //console.log('mutation sign up Error') 
-            state.signUpError = 'Username or passwort are wrong'
+            state.signInError = 'Username or passwort are wrong'
         }
     },
 
     actions: {
         
-        async signUp ({ commit }, user) {  // { dispatch}
-          //console.log('action signUp')
+        async signIn ({ commit }, user) {  // { dispatch}
+          //console.log('action signIn')
           const form = {
-            "username": user.username,
+            "email": user.email,
             "password": user.password
           }
-          try{
-              // const responce = await this.$axios.get('/ADRESS');
-              let response = await axios.post('/api/v1/auth/login', form)
-              const userData = {
-                "access_token": response.data.access_token,
-                "refresh_token": response.data.refresh_token,
-              }
-              if (response.statusText == "OK") {
-                localStorage.setItem("access_token", response.data.access_token)
-                localStorage.setItem("refresh_token", response.data.refresh_token)
-                commit('signUpToken', userData)
+          try{           
+              let response = await axios.post('/api/v1/auth/login', form, {
+                headers: {
+                  skipAuthorization: true  // Custom flag to skip the Authorization header
+                }
+              })
+
+              if (response.status == 200) { 
+ 
+                const userData = {
+                  "access_token": response.data.accessToken,
+                  "refresh_token": response.data.refreshToken,
+                  "username": response.data.username
+                }
+                localStorage.setItem("access_token", response.data.accessToken)
+                localStorage.setItem("refresh_token", response.data.refreshToken)
+                localStorage.setItem("username", response.data.username)
+                commit('signInToken', userData)
               } 
           } catch(error) {
-              //console.log('signUp in index.js catched an error')
-              console.log(error)
-              commit('signUpError')
+              //console.log('signIn in index.js catched an error')
+              console.log('Error during signIn:', error)
+              commit('signInError')
           }
         },
 
-
-        /* eslint-disable */
-        /* 
-        async refresh_token ( {commit} , error) {
-          //console.log("index action refresh token")
-          //console.log(error)
-          const refresh_token = "Bearer " + localStorage.getItem("refresh_token")
-          const headers = {'Authorization': refresh_token}               
-          try{
-            let response = await axios.post('/rpc/refresh',null ,{headers: headers})
-            //console.log(response)
-            const access_token = response.data.access_token
-            const refresh_token = response.data.refresh_token
-            if (response.statusText == "OK") {
-                localStorage.setItem("access_token", access_token)
-                localStorage.setItem("refresh_token", refresh_token)
-                //console.log(" new access token!!! " + localStorage.getItem("access_token"))
-          }   
-          }catch (error){
-            console.log(error)
-            //console.log('log Out')
-            commit('logOut')
-          }     
-        },
-        */
 
         logOut({ commit }) {
           commit('logOut')
           localStorage.removeItem('access_token')
           localStorage.removeItem('refresh_token')
+          localStorage.removeItem('username')
         },
 
         // create | insert a new User
@@ -123,25 +113,29 @@ export default createStore({
             "username": user.username,
             "password": user.password,
           }
-          // TODO try catch
+          
           let response = await axios.post('/api/v1/auth/register', form, {
             headers: {
-              // remove headers
+              skipAuthorization: true  // Custom flag to skip the Authorization header
             }
           })
+          .catch(error => {
+            console.error('Error during registration:', error);
+              })
 
           if (response.status == 200) {           
             localStorage.setItem("access_token", response.data.accessToken)
             localStorage.setItem("refresh_token", response.data.refreshToken)
+            localStorage.setItem("username", response.data.username)            
             }
 
           const userData = {
             "accessToken": response.data.accessToken,
-            "refreshToken": response.data.refreshToken
+            "refreshToken": response.data.refreshToken,
+            "username": response.data.username
           }
           commit('insertUser', userData)
         }
-
     },
   })
 
